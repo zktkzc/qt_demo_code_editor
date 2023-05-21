@@ -109,7 +109,8 @@ void MainWindow::OpenRecentFile()
 
 void MainWindow::on_new_file_triggered()
 {
-    ui->tabWidget->addTab(new QTextEdit(), "NewTab.txt");
+    MyTextEdit *myTextEdit = new MyTextEdit(this);
+    ui->tabWidget->addTab(myTextEdit, "NewTab.txt");
 }
 
 
@@ -229,7 +230,7 @@ void MainWindow::on_font_triggered()
 
 void MainWindow::on_about_triggered()
 {
-    QMessageBox::about(this, "这是我的Notepad！", "这是我的Notepad，欢迎学习和使用！");
+    QMessageBox::about(this, "这是我的CodeEditor！", "这是我的CodeEditor，欢迎学习和使用！");
 }
 
 

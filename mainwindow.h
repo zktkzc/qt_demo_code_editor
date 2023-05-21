@@ -10,6 +10,7 @@
 #include <QList>
 #include <QSet>
 #include <QDebug>
+#include "mytextedit.h"
 
 #if defined(QT_PRINTSUPPORT_LIB)
 #include <QtPrintSupport/qtprintsupportglobal.h>
