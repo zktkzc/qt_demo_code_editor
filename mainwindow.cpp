@@ -109,8 +109,7 @@ void MainWindow::OpenRecentFile()
 
 void MainWindow::on_new_file_triggered()
 {
-    m_currentFile.clear();
-    ui->textEdit->clear();
+    ui->tabWidget->addTab(new QTextEdit(), "NewTab.txt");
 }
 
 
