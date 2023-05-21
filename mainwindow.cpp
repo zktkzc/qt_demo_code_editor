@@ -53,7 +53,7 @@ MainWindow::MainWindow(QWidget *parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-    this->setCentralWidget(ui->textEdit);
+    this->setCentralWidget(ui->tabWidget);
     if (!m_settings)
         m_settings = new QSettings("settings.ini", QSettings::IniFormat);
 
