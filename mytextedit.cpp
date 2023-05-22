@@ -63,15 +63,30 @@ void MyTextEdit::TextBrowserVerticalScrollBarChanged()
 void MyTextEdit::OnTextChanged()
 {
     // 行数
-    int lineCount = ui->textEdit->document()->lineCount();
-    QString text = "";
-    for (int i = 0; i < lineCount; i++)
+    int lineCountOfTextEdit = ui->textEdit->document()->lineCount();
+    QString text = ui->textBrowser->toPlainText();
+    int lineCountOfTextBrowser = text.trimmed().split("\n").length();
+
+    if (lineCountOfTextBrowser > lineCountOfTextEdit)
     {
-        text += QString::number(i+1) + "\n";
+        for (int i = lineCountOfTextBrowser; i > lineCountOfTextEdit; i--)
+        {
+            text.chop((QString::number(i) + "\n").length());
+        }
+    }
+    else if (lineCountOfTextBrowser == 1 && text.length() < 1)
+    {
+        text += "1\n";
+    }
+    else if (lineCountOfTextBrowser < lineCountOfTextEdit)
+    {
+        for (int i = lineCountOfTextBrowser; i < lineCountOfTextEdit; i++)
+        {
+            text += QString::number(i+1) + "\n";
+        }
     }
 
-    ui->textBrowser->setMaximumWidth(25 + QString::number(lineCount).length() * 7);
-
+    ui->textBrowser->setMaximumWidth(25 + QString::number(lineCountOfTextEdit).length() * 7);
     ui->textBrowser->setText(text);
 }
 
