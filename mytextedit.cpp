@@ -6,13 +6,30 @@ MyTextEdit::MyTextEdit(QWidget *parent) :
     ui(new Ui::MyTextEdit)
 {
     ui->setupUi(this);
-    connect(ui->textEdit->horizontalScrollBar(), SIGNAL(valueChanged(int)), this, SLOT(TextEditHScrollBarChanged()));
-    connect(ui->horizontalScrollBar, SIGNAL(valueChanged(int)), this, SLOT(ScrollBarChanged()));
+
+    // 绑定滚动条
+    InitConnect();
+
+    // 初始化字体
+    InitFont();
 }
 
 MyTextEdit::~MyTextEdit()
 {
     delete ui;
+}
+
+void MyTextEdit::InitConnect()
+{
+    connect(ui->textEdit->horizontalScrollBar(), SIGNAL(valueChanged(int)), this, SLOT(TextEditHScrollBarChanged()));
+    connect(ui->horizontalScrollBar, SIGNAL(valueChanged(int)), this, SLOT(ScrollBarChanged()));
+}
+
+void MyTextEdit::InitFont()
+{
+    QFont font("新宋体", 14);
+    ui->textEdit->setFont(font);
+    ui->textBrowser->setFont(font);
 }
 
 void MyTextEdit::TextEditHScrollBarChanged()
@@ -27,3 +44,5 @@ void MyTextEdit::ScrollBarChanged()
 {
     ui->textEdit->horizontalScrollBar()->setValue(ui->horizontalScrollBar->value());
 }
+
+

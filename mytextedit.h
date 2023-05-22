@@ -15,6 +15,10 @@ public:
     explicit MyTextEdit(QWidget *parent = nullptr);
     ~MyTextEdit();
 
+private:
+    void InitConnect();
+    void InitFont();
+
 private slots:
     void TextEditHScrollBarChanged();
     void ScrollBarChanged();
