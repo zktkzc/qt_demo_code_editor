@@ -2,6 +2,7 @@
 #define MYTEXTEDIT_H
 
 #include <QWidget>
+#include <QTextEdit>
 
 namespace Ui {
 class MyTextEdit;
@@ -22,6 +23,7 @@ private:
 private slots:
     void TextEditHScrollBarChanged();
     void ScrollBarChanged();
+    void OnTextChanged();
 
 private:
     Ui::MyTextEdit *ui;
