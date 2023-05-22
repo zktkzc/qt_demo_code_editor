@@ -22,8 +22,12 @@ MyTextEdit::~MyTextEdit()
 void MyTextEdit::InitConnect()
 {
     connect(ui->textEdit, SIGNAL(textChanged()), this, SLOT(OnTextChanged()));
+
     connect(ui->textEdit->horizontalScrollBar(), SIGNAL(valueChanged(int)), this, SLOT(TextEditHScrollBarChanged()));
     connect(ui->horizontalScrollBar, SIGNAL(valueChanged(int)), this, SLOT(ScrollBarChanged()));
+
+    connect(ui->textEdit->verticalScrollBar(), SIGNAL(valueChanged(int)), this, SLOT(TextEditVScrollBarChanged()));
+    connect(ui->textBrowser->verticalScrollBar(), SIGNAL(valueChanged(int)), this, SLOT(TextBrowserVerticalScrollBarChanged()));
 }
 
 void MyTextEdit::InitFont()
@@ -46,6 +50,16 @@ void MyTextEdit::ScrollBarChanged()
     ui->textEdit->horizontalScrollBar()->setValue(ui->horizontalScrollBar->value());
 }
 
+void MyTextEdit::TextEditVScrollBarChanged()
+{
+    ui->textBrowser->verticalScrollBar()->setValue(ui->textEdit->verticalScrollBar()->value());
+}
+
+void MyTextEdit::TextBrowserVerticalScrollBarChanged()
+{
+    ui->textEdit->verticalScrollBar()->setValue(ui->textBrowser->verticalScrollBar()->value());
+}
+
 void MyTextEdit::OnTextChanged()
 {
     // 行数
@@ -56,7 +70,7 @@ void MyTextEdit::OnTextChanged()
         text += QString::number(i+1) + "\n";
     }
 
-    ui->textBrowser->setMaximumWidth(25 + QString::number(lineCount).length() * 5);
+    ui->textBrowser->setMaximumWidth(25 + QString::number(lineCount).length() * 7);
 
     ui->textBrowser->setText(text);
 }

@@ -23,6 +23,8 @@ private:
 private slots:
     void TextEditHScrollBarChanged();
     void ScrollBarChanged();
+    void TextEditVScrollBarChanged();
+    void TextBrowserVerticalScrollBarChanged();
     void OnTextChanged();
 
 private:
