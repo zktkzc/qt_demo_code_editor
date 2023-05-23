@@ -14,7 +14,23 @@ class MyTextEditByCode : public QWidget
 public:
     explicit MyTextEditByCode(QWidget *parent = nullptr);
 
-signals:
+private:
+    void initWidget();
+    void initFont();
+    void initConnection();
+    void initHighlighter();
+
+private:
+    QTextEdit* textEdit;
+    QTextBrowser* textBrowser;
+    QScrollBar* scrollBar;
+
+private slots:
+    void onTextEditHScrollBarChanged();
+    void onScrollBarChanged();
+    void onTextEditVScrollBarChanged();
+    void onTextBrowserVerticalScrollBarChanged();
+    void onTextChanged();
 
 };
 
