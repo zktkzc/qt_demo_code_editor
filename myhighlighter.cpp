@@ -10,6 +10,9 @@ MyHighlighter::MyHighlighter(QTextDocument* parent) : QSyntaxHighlighter(parent)
 
     // 字符串高亮
     addStringFormat();
+
+    // 注释高亮
+    addCommentFormat();
 }
 
 void MyHighlighter::highlightBlock(const QString &text)
@@ -70,6 +73,22 @@ void MyHighlighter::addStringFormat()
     m_highlightRules.append(rule);
 
     rule.pattern = QRegExp("`[^`]*`");
+    m_highlightRules.append(rule);
+}
+
+void MyHighlighter::addCommentFormat()
+{
+    QTextCharFormat commentFormat;
+    commentFormat.setFont(QFont(m_fontFamily, m_fontSize));
+    commentFormat.setForeground(Qt::darkGreen);
+
+    HighlightRule rule;
+    rule.pattern = QRegExp("\\/\\/.*$");
+    rule.format = commentFormat;
+
+    m_highlightRules.append(rule);
+
+    rule.pattern = QRegExp("\\/\\*[^*]*\\*+(?:[^/*][^*]*\\*+)*\\/");
     m_highlightRules.append(rule);
 }
 

@@ -17,6 +17,7 @@ private:
     void addNormalTextFormat();
     void addNumberFormat();
     void addStringFormat();
+    void addCommentFormat();
 
 private:
     struct HighlightRule{
