@@ -15,6 +15,9 @@ MyTextEditByCode::MyTextEditByCode(QWidget *parent)
 
     // 初始化高亮
     initHighlighter();
+
+    // 当前行高亮
+    highlightCurrentLine();
 }
 
 void MyTextEditByCode::initWidget()
@@ -73,11 +76,26 @@ void MyTextEditByCode::initConnection()
 
     connect(textEdit->verticalScrollBar(), SIGNAL(valueChanged(int)), this, SLOT(onTextEditVScrollBarChanged()));
     connect(textBrowser->verticalScrollBar(), SIGNAL(valueChanged(int)), this, SLOT(onTextBrowserVerticalScrollBarChanged()));
+
+    connect(textEdit, SIGNAL(cursorPositionChanged()), this, SLOT(highlightCurrentLine()));
 }
 
 void MyTextEditByCode::initHighlighter()
 {
     new MyHighlighter(textEdit->document());
+}
+
+void MyTextEditByCode::highlightCurrentLine()
+{
+    QList<QTextEdit::ExtraSelection> selections;
+    QTextEdit::ExtraSelection selection;
+    selection.format.setBackground(QColor(0, 100, 100, 20));
+    selection.format.setProperty(QTextFormat::FullWidthSelection, true); // 整行选中
+    selection.cursor = textEdit->textCursor();
+    // selection.cursor.clearSelection();
+    selections.append(selection);
+
+    textEdit->setExtraSelections(selections);
 }
 
 void MyTextEditByCode::onTextEditHScrollBarChanged()

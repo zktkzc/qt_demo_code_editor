@@ -32,7 +32,7 @@ private slots:
     void onTextEditVScrollBarChanged();
     void onTextBrowserVerticalScrollBarChanged();
     void onTextChanged();
-
+    void highlightCurrentLine();
 };
 
 #endif // MYTEXTEDITBYCODE_H
