@@ -1,3 +1,4 @@
+#include "myhighlighter.h"
 #include "mytextedit.h"
 #include "ui_mytextedit.h"
 
@@ -12,6 +13,9 @@ MyTextEdit::MyTextEdit(QWidget *parent) :
 
     // 初始化字体
     InitFont();
+
+    // 初始化高亮
+    initHighlighter();
 }
 
 MyTextEdit::~MyTextEdit()
@@ -32,9 +36,14 @@ void MyTextEdit::InitConnect()
 
 void MyTextEdit::InitFont()
 {
-    QFont font("新宋体", 14);
+    QFont font("Consolas", 14);
     ui->textEdit->setFont(font);
     ui->textBrowser->setFont(font);
+}
+
+void MyTextEdit::initHighlighter()
+{
+    new MyHighlighter(ui->textEdit->document());
 }
 
 void MyTextEdit::TextEditHScrollBarChanged()

@@ -19,6 +19,7 @@ public:
 private:
     void InitConnect();
     void InitFont();
+    void initHighlighter();
 
 private slots:
     void TextEditHScrollBarChanged();

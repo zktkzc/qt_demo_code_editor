@@ -13,10 +13,12 @@ qtHaveModule(printsupport) : QT += printsupport
 SOURCES += \
     main.cpp \
     mainwindow.cpp \
+    myhighlighter.cpp \
     mytextedit.cpp
 
 HEADERS += \
     mainwindow.h \
+    myhighlighter.h \
     mytextedit.h
 
 FORMS += \
