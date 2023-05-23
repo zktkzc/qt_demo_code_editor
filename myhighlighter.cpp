@@ -1,7 +1,10 @@
 #include "myhighlighter.h"
 
-MyHighlighter::MyHighlighter(QTextDocument* parent) : QSyntaxHighlighter(parent)
+MyHighlighter::MyHighlighter(QTextDocument* parent, QString fontFamily, int fontSize) : QSyntaxHighlighter(parent)
 {
+    m_fontFamily = fontFamily;
+    m_fontSize = fontSize;
+
     // 普通文本高亮
     addNormalTextFormat();
 
@@ -19,6 +22,9 @@ MyHighlighter::MyHighlighter(QTextDocument* parent) : QSyntaxHighlighter(parent)
 
     // 类名高亮
     addClassNameFormat();
+
+    // 函数方法名高亮
+    addFunctionFormat();
 }
 
 void MyHighlighter::highlightBlock(const QString &text)
@@ -90,6 +96,7 @@ void MyHighlighter::addCommentFormat()
     QTextCharFormat commentFormat;
     commentFormat.setFont(QFont(m_fontFamily, m_fontSize));
     commentFormat.setForeground(Qt::darkGreen);
+    commentFormat.setFontItalic(true);
 
     HighlightRule rule;
     rule.pattern = QRegExp("\\/\\/.*$");
@@ -108,6 +115,7 @@ void MyHighlighter::addMultiLineCommentFormat(const QString &text)
     QTextCharFormat multiLineCommentFormat;
     multiLineCommentFormat.setFont(QFont(m_fontFamily, m_fontSize));
     multiLineCommentFormat.setForeground(Qt::darkGreen);
+    multiLineCommentFormat.setFontItalic(true);
 
     int startIndex = 0;
     if (previousBlockState() != 1)
@@ -171,6 +179,22 @@ void MyHighlighter::addClassNameFormat()
     rule.pattern = QRegExp("\\b[A-Z]+\\w*");
     rule.format = classNameFormat;
 
+    m_highlightRules.append(rule);
+}
+
+void MyHighlighter::addFunctionFormat()
+{
+    QTextCharFormat functionFormat;
+    functionFormat.setFont(QFont(m_fontFamily, m_fontSize));
+    functionFormat.setForeground(QColor(200, 0, 150));
+
+    HighlightRule rule;
+    rule.pattern = QRegExp("\\w+\\(");
+    rule.format = functionFormat;
+
+    m_highlightRules.append(rule);
+
+    rule.pattern = QRegExp("\\)");
     m_highlightRules.append(rule);
 }
 

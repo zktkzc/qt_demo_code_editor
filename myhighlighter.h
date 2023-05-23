@@ -9,7 +9,7 @@
 class MyHighlighter : public QSyntaxHighlighter
 {
 public:
-    explicit MyHighlighter(QTextDocument* parent = nullptr);
+    explicit MyHighlighter(QTextDocument* parent = nullptr, QString fontFamily = "Consolas", int fontSize = 14);
 
 protected:
     void highlightBlock(const QString &text);
@@ -22,6 +22,7 @@ private:
     void addMultiLineCommentFormat(const QString &text);
     void addKeywordsFormat();
     void addClassNameFormat();
+    void addFunctionFormat();
 
 private:
     struct HighlightRule{
