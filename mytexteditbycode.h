@@ -24,6 +24,7 @@ private:
     QTextEdit* textEdit;
     QTextBrowser* textBrowser;
     QScrollBar* scrollBar;
+    QFont m_font;
 
 private slots:
     void onTextEditHScrollBarChanged();

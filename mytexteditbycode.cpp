@@ -52,9 +52,16 @@ void MyTextEditByCode::initWidget()
 
 void MyTextEditByCode::initFont()
 {
-    QFont font("Consolas", 14);
-    textEdit->setFont(font);
-    textBrowser->setFont(font);
+    m_font = QFont("Consolas", 14);
+    textEdit->setFont(m_font);
+
+    QTextBlockFormat format;
+    format.setLineHeight(QFontMetrics(m_font).height() * 1.1, QTextBlockFormat::FixedHeight);
+    auto cursor = textEdit->textCursor();
+    cursor.select(QTextCursor::Document);
+    cursor.mergeBlockFormat(format);
+
+    textBrowser->setFont(m_font);
 }
 
 void MyTextEditByCode::initConnection()
@@ -88,6 +95,9 @@ void MyTextEditByCode::onScrollBarChanged()
 
 void MyTextEditByCode::onTextEditVScrollBarChanged()
 {
+    textBrowser->verticalScrollBar()->setMaximum(textEdit->verticalScrollBar()->maximum());
+    textBrowser->verticalScrollBar()->setMinimum(textEdit->verticalScrollBar()->minimum());
+    textBrowser->verticalScrollBar()->setPageStep(textEdit->verticalScrollBar()->pageStep());
     textBrowser->verticalScrollBar()->setValue(textEdit->verticalScrollBar()->value());
 }
 
@@ -124,4 +134,11 @@ void MyTextEditByCode::onTextChanged()
 
     textBrowser->setMaximumWidth(25 + QString::number(lineCountOfTextEdit).length() * 7);
     textBrowser->setText(text);
+
+    QTextBlockFormat format;
+    format.setLineHeight(QFontMetrics(m_font).height() * 1.1, QTextBlockFormat::FixedHeight);
+    format.setAlignment(Qt::AlignRight);
+    auto cursor = textBrowser->textCursor();
+    cursor.select(QTextCursor::Document);
+    cursor.mergeBlockFormat(format);
 }
