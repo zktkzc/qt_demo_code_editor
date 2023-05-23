@@ -1,6 +1,8 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 
+#include <MyTextEditByCode.h>
+
 QSettings *m_settings;
 
 // 获取历史记录
@@ -109,8 +111,10 @@ void MainWindow::OpenRecentFile()
 
 void MainWindow::on_new_file_triggered()
 {
-    MyTextEdit *myTextEdit = new MyTextEdit(this);
-    ui->tabWidget->addTab(myTextEdit, "NewTab.txt");
+    // MyTextEdit *myTextEdit = new MyTextEdit(this);
+    // ui->tabWidget->addTab(myTextEdit, "NewTab.txt");
+
+    ui->tabWidget->addTab(new MyTextEditByCode(this), "NewTab.txt");
 }
 
 
