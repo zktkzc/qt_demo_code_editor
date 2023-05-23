@@ -4,6 +4,7 @@
 #include <QObject>
 #include <QSyntaxHighlighter>
 #include <QTextCharFormat>
+#include <QTextStream>
 
 class MyHighlighter : public QSyntaxHighlighter
 {
@@ -18,6 +19,8 @@ private:
     void addNumberFormat();
     void addStringFormat();
     void addCommentFormat();
+    void addMultiLineCommentFormat(const QString &text);
+    void addKeywordsFormat();
 
 private:
     struct HighlightRule{

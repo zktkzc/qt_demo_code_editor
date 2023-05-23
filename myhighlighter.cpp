@@ -13,6 +13,9 @@ MyHighlighter::MyHighlighter(QTextDocument* parent) : QSyntaxHighlighter(parent)
 
     // 注释高亮
     addCommentFormat();
+
+    // 关键字高亮
+    addKeywordsFormat();
 }
 
 void MyHighlighter::highlightBlock(const QString &text)
@@ -28,34 +31,8 @@ void MyHighlighter::highlightBlock(const QString &text)
         }
     }
 
-    setCurrentBlockState(0);
-
-    QRegExp commentStartRegExp("\\/\\*");
-    QRegExp commentEndRegExp("\\*\\/");
-
-    QTextCharFormat multiLineCommentFormat;
-    multiLineCommentFormat.setFont(QFont(m_fontFamily, m_fontSize));
-    multiLineCommentFormat.setForeground(Qt::darkGreen);
-
-    int startIndex = 0;
-    if (previousBlockState() != 1)
-        startIndex = commentStartRegExp.indexIn(text);
-    int commentLength = 0;
-    while (startIndex >= 0)
-    {
-        int endIndex = commentEndRegExp.indexIn(text, startIndex);
-        if (endIndex == -1)
-        {
-            setCurrentBlockState(1);
-            commentLength = text.length() - startIndex;
-        }
-        else
-        {
-            commentLength = endIndex - startIndex + commentEndRegExp.matchedLength();
-        }
-        setFormat(startIndex, commentLength, multiLineCommentFormat);
-        startIndex = commentStartRegExp.indexIn(text, commentLength + startIndex);
-    }
+    // 多行注释高亮
+    addMultiLineCommentFormat(text);
 }
 
 void MyHighlighter::addNormalTextFormat()
@@ -116,9 +93,68 @@ void MyHighlighter::addCommentFormat()
     rule.format = commentFormat;
 
     m_highlightRules.append(rule);
+}
 
-    rule.pattern = QRegExp("\\/\\*[^*]*\\*+(?:[^/*][^*]*\\*+)*\\/");
-    m_highlightRules.append(rule);
+void MyHighlighter::addMultiLineCommentFormat(const QString &text)
+{
+    setCurrentBlockState(0);
+
+    QRegExp commentStartRegExp("\\/\\*");
+    QRegExp commentEndRegExp("\\*\\/");
+
+    QTextCharFormat multiLineCommentFormat;
+    multiLineCommentFormat.setFont(QFont(m_fontFamily, m_fontSize));
+    multiLineCommentFormat.setForeground(Qt::darkGreen);
+
+    int startIndex = 0;
+    if (previousBlockState() != 1)
+        startIndex = commentStartRegExp.indexIn(text);
+    int commentLength = 0;
+    while (startIndex >= 0)
+    {
+        int endIndex = commentEndRegExp.indexIn(text, startIndex);
+        if (endIndex == -1)
+        {
+            setCurrentBlockState(1);
+            commentLength = text.length() - startIndex;
+        }
+        else
+        {
+            commentLength = endIndex - startIndex + commentEndRegExp.matchedLength();
+        }
+        setFormat(startIndex, commentLength, multiLineCommentFormat);
+        startIndex = commentStartRegExp.indexIn(text, commentLength + startIndex);
+    }
+}
+
+void MyHighlighter::addKeywordsFormat()
+{
+    QFile file(":/config/config/keywords.txt");
+    QTextStream keywordsStream(&file);
+
+    HighlightRule rule;
+    QTextCharFormat keywordsFormat;
+    keywordsFormat.setFont(QFont(m_fontFamily, m_fontSize));
+    keywordsFormat.setForeground(Qt::darkMagenta);
+    rule.format = keywordsFormat;
+
+    if (file.open(QIODevice::ReadOnly | QIODevice::Text))
+    {
+        keywordsStream.seek(0);
+
+        QString line;
+        while (!keywordsStream.atEnd())
+        {
+            line = keywordsStream.readLine();
+            if (!line.isEmpty())
+            {
+                rule.pattern = QRegExp("\\b" + line + "\\b");
+                m_highlightRules.append(rule);
+            }
+        }
+
+        file.close();
+    }
 }
 
 
