@@ -27,6 +27,35 @@ void MyHighlighter::highlightBlock(const QString &text)
             index = regExp.indexIn(text, index + length);
         }
     }
+
+    setCurrentBlockState(0);
+
+    QRegExp commentStartRegExp("\\/\\*");
+    QRegExp commentEndRegExp("\\*\\/");
+
+    QTextCharFormat multiLineCommentFormat;
+    multiLineCommentFormat.setFont(QFont(m_fontFamily, m_fontSize));
+    multiLineCommentFormat.setForeground(Qt::darkGreen);
+
+    int startIndex = 0;
+    if (previousBlockState() != 1)
+        startIndex = commentStartRegExp.indexIn(text);
+    int commentLength = 0;
+    while (startIndex >= 0)
+    {
+        int endIndex = commentEndRegExp.indexIn(text, startIndex);
+        if (endIndex == -1)
+        {
+            setCurrentBlockState(1);
+            commentLength = text.length() - startIndex;
+        }
+        else
+        {
+            commentLength = endIndex - startIndex + commentEndRegExp.matchedLength();
+        }
+        setFormat(startIndex, commentLength, multiLineCommentFormat);
+        startIndex = commentStartRegExp.indexIn(text, commentLength + startIndex);
+    }
 }
 
 void MyHighlighter::addNormalTextFormat()
