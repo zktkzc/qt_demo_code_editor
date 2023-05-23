@@ -16,6 +16,7 @@ protected:
 private:
     void addNormalTextFormat();
     void addNumberFormat();
+    void addStringFormat();
 
 private:
     struct HighlightRule{

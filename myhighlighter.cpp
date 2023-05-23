@@ -7,6 +7,9 @@ MyHighlighter::MyHighlighter(QTextDocument* parent) : QSyntaxHighlighter(parent)
 
     // 数字高亮
     addNumberFormat();
+
+    // 字符串高亮
+    addStringFormat();
 }
 
 void MyHighlighter::highlightBlock(const QString &text)
@@ -48,6 +51,25 @@ void MyHighlighter::addNumberFormat()
 
     rule.format = numberFormat;
 
+    m_highlightRules.append(rule);
+}
+
+void MyHighlighter::addStringFormat()
+{
+    QTextCharFormat stringFormat;
+    stringFormat.setFont(QFont(m_fontFamily, m_fontSize));
+    stringFormat.setForeground(QColor(0, 180, 180));
+
+    HighlightRule rule;
+    rule.pattern = QRegExp("'[^']*'");
+    rule.format = stringFormat;
+
+    m_highlightRules.append(rule);
+
+    rule.pattern = QRegExp("\"[^\"]*\"");
+    m_highlightRules.append(rule);
+
+    rule.pattern = QRegExp("`[^`]*`");
     m_highlightRules.append(rule);
 }
 
