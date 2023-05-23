@@ -16,6 +16,9 @@ MyHighlighter::MyHighlighter(QTextDocument* parent) : QSyntaxHighlighter(parent)
 
     // 关键字高亮
     addKeywordsFormat();
+
+    // 类名高亮
+    addClassNameFormat();
 }
 
 void MyHighlighter::highlightBlock(const QString &text)
@@ -155,6 +158,20 @@ void MyHighlighter::addKeywordsFormat()
 
         file.close();
     }
+}
+
+void MyHighlighter::addClassNameFormat()
+{
+    QTextCharFormat classNameFormat;
+    classNameFormat.setFont(QFont(m_fontFamily, m_fontSize));
+    classNameFormat.setForeground(QColor(150, 20, 100));
+    classNameFormat.setFontWeight(99);
+
+    HighlightRule rule;
+    rule.pattern = QRegExp("\\b[A-Z]+\\w*");
+    rule.format = classNameFormat;
+
+    m_highlightRules.append(rule);
 }
 
 

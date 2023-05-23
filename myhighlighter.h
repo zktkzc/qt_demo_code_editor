@@ -21,6 +21,7 @@ private:
     void addCommentFormat();
     void addMultiLineCommentFormat(const QString &text);
     void addKeywordsFormat();
+    void addClassNameFormat();
 
 private:
     struct HighlightRule{
