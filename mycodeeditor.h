@@ -11,6 +11,7 @@ class MyCodeEditor : public QPlainTextEdit
     Q_OBJECT
 public:
     explicit MyCodeEditor(QWidget *parent = nullptr);
+    ~MyCodeEditor();
     void lineNumberWidgetPaintEvent(QPaintEvent* event);
     void lineNumberWidgetMousePressEvent(QMouseEvent* event);
     void lineNumberWidgetWheelEvent(QWheelEvent* event);

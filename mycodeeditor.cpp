@@ -20,6 +20,15 @@ MyCodeEditor::MyCodeEditor(QWidget *parent)
     setLineWrapMode(QPlainTextEdit::NoWrap);
 }
 
+MyCodeEditor::~MyCodeEditor()
+{
+    if (lineNumberWidget)
+    {
+        delete lineNumberWidget;
+        lineNumberWidget = nullptr;
+    }
+}
+
 void MyCodeEditor::initFont()
 {
     this->setFont(QFont("Consolas", 14));

@@ -256,6 +256,7 @@ void MainWindow::on_clear_history_triggered()
 
 void MainWindow::on_tabWidget_tabCloseRequested(int index)
 {
+    delete (ui->tabWidget->cornerWidget());
     ui->tabWidget->removeTab(index);
 }
 

@@ -20,6 +20,13 @@ MyTextEditByCode::MyTextEditByCode(QWidget *parent)
     highlightCurrentLine();
 }
 
+MyTextEditByCode::~MyTextEditByCode()
+{
+    delete textEdit;
+    delete textBrowser;
+    delete scrollBar;
+}
+
 void MyTextEditByCode::initWidget()
 {
     QWidget* horizontalLayoutWidget = new QWidget();
