@@ -36,6 +36,9 @@ public:
     ui->print->setEnabled(false);
 #endif
 
+protected:
+    void closeEvent(QCloseEvent* event) override;
+
 private:
     void InitMenu();
     void OpenRecentFile();

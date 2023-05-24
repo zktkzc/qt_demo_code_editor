@@ -55,7 +55,8 @@ void MainWindow::initAction()
     ui->copy->setEnabled(valid);
     ui->paste->setEnabled(valid);
     ui->cut->setEnabled(valid);
-    ui->print->setEnabled(valid);
+    ui->undo->setEnabled(valid);
+    ui->redo->setEnabled(valid);
 }
 
 MainWindow::MainWindow(QWidget *parent)
@@ -76,6 +77,16 @@ MainWindow::MainWindow(QWidget *parent)
 MainWindow::~MainWindow()
 {
     delete ui;
+}
+
+void MainWindow::closeEvent(QCloseEvent *event)
+{
+    MyCodeEditor* codeEditor = (MyCodeEditor*)(ui->tabWidget->currentWidget());
+    if (ui->tabWidget->count() > 0)
+    {
+        QMessageBox::question(this, "警告", "您还有未保存文档！确定要关闭吗？", QMessageBox::Yes | QMessageBox::No) ==
+            QMessageBox::Yes ? event->accept() : event->ignore();
+    }
 }
 
 void MainWindow::InitMenu()
@@ -255,18 +266,18 @@ void MainWindow::on_exit_triggered()
 
 void MainWindow::on_print_triggered()
 {
+    MyCodeEditor* codeEditor = (MyCodeEditor*)(ui->tabWidget->currentWidget());
+    if (codeEditor)
+    {
 #if defined(QT_PRINTSUPPORT_LIB) && QT_CONFIG(printer)
     QPrinter printDev;
 #if QT_CONFIG(printdialog)
     QPrintDialog dialog(&printDev, this);
     if (dialog.exec() == QDialog::Rejected) return;
 #endif
-    MyCodeEditor* codeEditor = (MyCodeEditor*)(ui->tabWidget->currentWidget());
-    if (codeEditor)
-    {
         codeEditor->print(&printDev);
-    }
 #endif
+    }
 }
 
 // 清空历史记录
@@ -281,7 +292,7 @@ void MainWindow::on_tabWidget_tabCloseRequested(int index)
     MyCodeEditor* codeEditor = (MyCodeEditor*)(ui->tabWidget->currentWidget());
     if (!codeEditor->checkSaved())
     {
-        auto btn = QMessageBox::question(this, "警告", "您还没有保存文档！是否保存？", QMessageBox::Yes | QMessageBox::No);
+        auto btn = QMessageBox::question(this, "警告", "您还没有保存文档！是否保存？", QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel);
         if (btn == QMessageBox::Yes)
         {
             if (codeEditor->saveFile())
@@ -290,6 +301,11 @@ void MainWindow::on_tabWidget_tabCloseRequested(int index)
                 ui->tabWidget->setTabText(ui->tabWidget->currentIndex(), codeEditor->getFileName());
                 InitMenu();
             }
+            return;
+        }
+        else if (btn == QMessageBox::Cancel)
+        {
+            return;
         }
     }
 
