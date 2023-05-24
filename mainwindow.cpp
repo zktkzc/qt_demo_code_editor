@@ -1,4 +1,5 @@
 #include "mainwindow.h"
+#include "mycodeeditor.h"
 #include "ui_mainwindow.h"
 
 #include <MyTextEditByCode.h>
@@ -114,7 +115,9 @@ void MainWindow::on_new_file_triggered()
     // MyTextEdit *myTextEdit = new MyTextEdit(this);
     // ui->tabWidget->addTab(myTextEdit, "NewTab.txt");
 
-    ui->tabWidget->addTab(new MyTextEditByCode(this), "NewTab.txt");
+//    ui->tabWidget->addTab(new MyTextEditByCode(this), "NewTab.txt");
+
+    ui->tabWidget->addTab(new MyCodeEditor(this), "NewTab.txt");
 }
 
 
