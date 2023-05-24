@@ -2,8 +2,6 @@
 #include "mycodeeditor.h"
 #include "ui_mainwindow.h"
 
-#include <MyTextEditByCode.h>
-
 QSettings *m_settings;
 
 // 获取历史记录
@@ -112,11 +110,6 @@ void MainWindow::OpenRecentFile()
 
 void MainWindow::on_new_file_triggered()
 {
-    // MyTextEdit *myTextEdit = new MyTextEdit(this);
-    // ui->tabWidget->addTab(myTextEdit, "NewTab.txt");
-
-//    ui->tabWidget->addTab(new MyTextEditByCode(this), "NewTab.txt");
-
     ui->tabWidget->addTab(new MyCodeEditor(this), "NewTab.txt");
 }
 
@@ -135,7 +128,10 @@ void MainWindow::on_open_file_triggered()
     this->setWindowTitle(fileName);
     QTextStream in(&file);
     QString text = in.readAll();
-    ui->textEdit->setText(text);
+    MyCodeEditor* codeEditor = new MyCodeEditor(this);
+    codeEditor->setPlainText(text);
+    ui->tabWidget->addTab(codeEditor, m_currentFile);
+    ui->tabWidget->setCurrentIndex(ui->tabWidget->count() - 1);
     file.close();
 
     SaveHistory(m_currentFile);
