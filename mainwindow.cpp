@@ -156,23 +156,16 @@ void MainWindow::on_save_file_triggered()
 
 void MainWindow::on_save_as_triggered()
 {
-    QString fileName;
-    fileName = QFileDialog::getSaveFileName(this, "另存文件");
-    m_currentFile = fileName;
-    QFile file(fileName);
-    if (!file.open(QIODevice::WriteOnly | QFile::Text))
+    MyCodeEditor* codeEditor = (MyCodeEditor*)(ui->tabWidget->currentWidget());
+    if (codeEditor)
     {
-        QMessageBox::warning(this, "警告", "无法保存文件：" + file.errorString());
-        return;
+        if (codeEditor->saveAs())
+        {
+            SaveHistory(codeEditor->getFileName());
+            ui->tabWidget->setTabText(ui->tabWidget->currentIndex(), codeEditor->getFileName());
+            InitMenu();
+        }
     }
-
-    setWindowTitle(fileName);
-    QTextStream out(&file);
-    QString text = ui->textEdit->toHtml();
-    out << text;
-    file.close();
-    SaveHistory(m_currentFile);
-    InitMenu();
 }
 
 

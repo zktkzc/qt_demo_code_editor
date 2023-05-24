@@ -127,6 +127,25 @@ bool MyCodeEditor::saveFile()
     return true;
 }
 
+bool MyCodeEditor::saveAs()
+{
+    QString fileName;
+    fileName = QFileDialog::getSaveFileName(this, "另存文件");
+    m_fileName = fileName;
+    QFile file(fileName);
+    if (!file.open(QIODevice::WriteOnly | QFile::Text))
+    {
+        QMessageBox::warning(this, "警告", "无法保存文件：" + file.errorString());
+        return false;
+    }
+
+    QTextStream out(&file);
+    QString text = toPlainText();
+    out << text;
+    file.close();
+    return true;
+}
+
 void MyCodeEditor::resizeEvent(QResizeEvent *event)
 {
     QPlainTextEdit::resizeEvent(event);

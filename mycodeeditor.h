@@ -15,6 +15,7 @@ public:
     void lineNumberWidgetMousePressEvent(QMouseEvent* event);
     void lineNumberWidgetWheelEvent(QWheelEvent* event);
     bool saveFile();
+    bool saveAs();
     void setFileName(QString fileName)
     {
         m_fileName = fileName;
