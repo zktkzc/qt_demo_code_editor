@@ -141,28 +141,16 @@ void MainWindow::on_open_file_triggered()
 
 void MainWindow::on_save_file_triggered()
 {
-    QString fileName;
-    if (m_currentFile.isEmpty())
+    MyCodeEditor* codeEditor = (MyCodeEditor*)(ui->tabWidget->currentWidget());
+    if (codeEditor)
     {
-        fileName = QFileDialog::getSaveFileName(this, "保存文件");
-        m_currentFile = fileName;
+        if (codeEditor->saveFile())
+        {
+            SaveHistory(codeEditor->getFileName());
+            ui->tabWidget->setTabText(ui->tabWidget->currentIndex(), codeEditor->getFileName());
+            InitMenu();
+        }
     }
-
-    fileName = m_currentFile;
-    QFile file(fileName);
-    if (!file.open(QIODevice::WriteOnly | QFile::Text))
-    {
-        QMessageBox::warning(this, "警告", "无法保存文件：" + file.errorString());
-        return;
-    }
-
-    setWindowTitle(fileName);
-    QTextStream out(&file);
-    QString text = ui->textEdit->toHtml();
-    out << text;
-    file.close();
-    SaveHistory(m_currentFile);
-    InitMenu();
 }
 
 
@@ -254,7 +242,6 @@ void MainWindow::on_exit_triggered()
     QCoreApplication::exit();
 }
 
-
 void MainWindow::on_print_triggered()
 {
 #if defined(QT_PRINTSUPPORT_LIB) && QT_CONFIG(printer)
@@ -274,5 +261,8 @@ void MainWindow::on_clear_history_triggered()
     InitMenu();
 }
 
-
+void MainWindow::on_tabWidget_tabCloseRequested(int index)
+{
+    ui->tabWidget->removeTab(index);
+}
 

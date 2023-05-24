@@ -14,6 +14,15 @@ public:
     void lineNumberWidgetPaintEvent(QPaintEvent* event);
     void lineNumberWidgetMousePressEvent(QMouseEvent* event);
     void lineNumberWidgetWheelEvent(QWheelEvent* event);
+    bool saveFile();
+    void setFileName(QString fileName)
+    {
+        m_fileName = fileName;
+    }
+    QString getFileName()
+    {
+        return m_fileName;
+    }
 
 protected:
     void resizeEvent(QResizeEvent* event) override;
@@ -30,6 +39,7 @@ private slots:
 
 private:
     LineNumberWidget* lineNumberWidget;
+    QString m_fileName;
 
 };
 

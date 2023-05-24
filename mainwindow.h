@@ -75,6 +75,8 @@ private slots:
 
     void on_clear_history_triggered();
 
+    void on_tabWidget_tabCloseRequested(int index);
+
 private:
     Ui::MainWindow *ui;
     QString m_currentFile;

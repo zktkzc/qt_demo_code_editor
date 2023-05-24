@@ -2,6 +2,8 @@
 #include "myhighlighter.h"
 #include "qscrollbar.h"
 
+#include <QFileDialog>
+#include <QMessageBox>
 #include <QPainter>
 
 MyCodeEditor::MyCodeEditor(QWidget *parent)
@@ -99,6 +101,30 @@ void MyCodeEditor::lineNumberWidgetWheelEvent(QWheelEvent *event)
     else
         verticalScrollBar()->setValue(verticalScrollBar()->value() - event->delta());
     event->accept();
+}
+
+bool MyCodeEditor::saveFile()
+{
+    QString fileName;
+    if (m_fileName.isEmpty())
+    {
+        fileName = QFileDialog::getSaveFileName(this, "保存文件");
+        m_fileName = fileName;
+    }
+
+    fileName = m_fileName;
+    QFile file(fileName);
+    if (!file.open(QIODevice::WriteOnly | QFile::Text))
+    {
+        QMessageBox::warning(this, "警告", "无法保存文件：" + file.errorString());
+        return false;
+    }
+
+    QTextStream out(&file);
+    out << toPlainText();
+    file.close();
+
+    return true;
 }
 
 void MyCodeEditor::resizeEvent(QResizeEvent *event)
