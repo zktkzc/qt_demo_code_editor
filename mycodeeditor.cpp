@@ -1,19 +1,17 @@
 #include "mycodeeditor.h"
-#include "myhighlighter.h"
 #include "qscrollbar.h"
-
 #include <QFileDialog>
 #include <QMessageBox>
 #include <QPainter>
 
-MyCodeEditor::MyCodeEditor(QWidget *parent)
+MyCodeEditor::MyCodeEditor(QWidget *parent, QFont font)
     : QPlainTextEdit{parent}, lineNumberWidget(new LineNumberWidget(this))
 {
-    initFont();
-
     initConnection();
 
     initHighlighter();
+
+    setAllFont(font);
 
     updateLineNumberWidgetWidth();
 
@@ -27,11 +25,12 @@ MyCodeEditor::~MyCodeEditor()
         delete lineNumberWidget;
         lineNumberWidget = nullptr;
     }
-}
 
-void MyCodeEditor::initFont()
-{
-    this->setFont(QFont("Consolas", 14));
+    if (m_highlighter)
+    {
+        delete m_highlighter;
+        m_highlighter = nullptr;
+    }
 }
 
 void MyCodeEditor::initConnection()
@@ -43,7 +42,7 @@ void MyCodeEditor::initConnection()
 
 void MyCodeEditor::initHighlighter()
 {
-    new MyHighlighter(document());
+    m_highlighter = new MyHighlighter(document());
 }
 
 int MyCodeEditor::getLineNumberWidgetWidth()
@@ -153,6 +152,13 @@ bool MyCodeEditor::saveAs()
     out << text;
     file.close();
     return true;
+}
+
+void MyCodeEditor::setAllFont(QFont font)
+{
+    this->setFont(font);
+    m_highlighter->setFont(font);
+    updateLineNumberWidgetWidth();
 }
 
 void MyCodeEditor::resizeEvent(QResizeEvent *event)

@@ -39,6 +39,7 @@ public:
 private:
     void InitMenu();
     void OpenRecentFile();
+    void initFont();
 
 private slots:
     void on_new_file_triggered();
@@ -74,6 +75,8 @@ private slots:
 private:
     Ui::MainWindow *ui;
     QString m_currentFile;
+    QString m_fontFamily;
+    int m_fontSize;
 
 };
 #endif // MAINWINDOW_H

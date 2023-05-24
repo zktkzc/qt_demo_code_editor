@@ -27,6 +27,12 @@ MyHighlighter::MyHighlighter(QTextDocument* parent, QString fontFamily, int font
     addFunctionFormat();
 }
 
+void MyHighlighter::setFont(QFont font)
+{
+    m_fontFamily = font.family();
+    m_fontSize = font.pointSize();
+}
+
 void MyHighlighter::highlightBlock(const QString &text)
 {
     foreach (const HighlightRule &rule, m_highlightRules) {

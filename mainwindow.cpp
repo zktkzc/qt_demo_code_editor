@@ -58,6 +58,8 @@ MainWindow::MainWindow(QWidget *parent)
     if (!m_settings)
         m_settings = new QSettings("settings.ini", QSettings::IniFormat);
 
+    initFont();
+
     InitMenu();
 }
 
@@ -100,7 +102,7 @@ void MainWindow::OpenRecentFile()
     this->setWindowTitle(fileName);
     QTextStream in(&file);
     QString text = in.readAll();
-    MyCodeEditor* codeEditor = new MyCodeEditor(this);
+    MyCodeEditor* codeEditor = new MyCodeEditor(this, QFont(m_fontFamily, m_fontSize));
     codeEditor->setPlainText(text);
     ui->tabWidget->addTab(codeEditor, m_currentFile);
     ui->tabWidget->setCurrentIndex(ui->tabWidget->count() - 1);
@@ -110,10 +112,16 @@ void MainWindow::OpenRecentFile()
     InitMenu();
 }
 
+void MainWindow::initFont()
+{
+    m_fontFamily = m_settings->value("font_family", "Consolas").toString();
+    m_fontSize = m_settings->value("font_size", 14).toInt();
+}
+
 
 void MainWindow::on_new_file_triggered()
 {
-    ui->tabWidget->addTab(new MyCodeEditor(this), "NewTab.txt");
+    ui->tabWidget->addTab(new MyCodeEditor(this, QFont(m_fontFamily, m_fontSize)), "NewTab.txt");
 }
 
 
@@ -131,7 +139,7 @@ void MainWindow::on_open_file_triggered()
     this->setWindowTitle(fileName);
     QTextStream in(&file);
     QString text = in.readAll();
-    MyCodeEditor* codeEditor = new MyCodeEditor(this);
+    MyCodeEditor* codeEditor = new MyCodeEditor(this, QFont(m_fontFamily, m_fontSize));
     codeEditor->setPlainText(text);
     ui->tabWidget->addTab(codeEditor, m_currentFile);
     ui->tabWidget->setCurrentIndex(ui->tabWidget->count() - 1);
@@ -265,10 +273,13 @@ void MainWindow::on_tabWidget_tabCloseRequested(int index)
 void MainWindow::on_font_triggered()
 {
     bool fontSelected;
-    QFont font = QFontDialog::getFont(&fontSelected, this);
+    QFont font = QFontDialog::getFont(&fontSelected, QFont(m_fontFamily, m_fontSize),this);
+    MyCodeEditor* codeEditor = (MyCodeEditor*)(ui->tabWidget->currentWidget());
     if (fontSelected)
     {
-
+        codeEditor->setAllFont(font);
     }
+    m_settings->setValue("font_family", font.family());
+    m_settings->setValue("font_size", font.pointSize());
 }
 

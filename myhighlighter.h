@@ -10,6 +10,7 @@ class MyHighlighter : public QSyntaxHighlighter
 {
 public:
     explicit MyHighlighter(QTextDocument* parent = nullptr, QString fontFamily = "Consolas", int fontSize = 14);
+    void setFont(QFont font);
 
 protected:
     void highlightBlock(const QString &text);
