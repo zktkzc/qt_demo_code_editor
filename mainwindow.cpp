@@ -47,6 +47,17 @@ void MainWindow::SaveHistory(QString path)
     m_settings->endArray();
 }
 
+void MainWindow::initAction()
+{
+    bool valid = ui->tabWidget->count() > 0;
+    ui->save_file->setEnabled(valid);
+    ui->save_as->setEnabled(valid);
+    ui->copy->setEnabled(valid);
+    ui->paste->setEnabled(valid);
+    ui->cut->setEnabled(valid);
+    ui->print->setEnabled(valid);
+}
+
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
@@ -58,6 +69,8 @@ MainWindow::MainWindow(QWidget *parent)
     initFont();
 
     InitMenu();
+
+    initAction();
 }
 
 MainWindow::~MainWindow()
@@ -95,17 +108,18 @@ void MainWindow::OpenRecentFile()
         QMessageBox::warning(this, "警告", "无法打开此文件：" + file.errorString());
         return;
     }
-    m_currentFile = fileName;
     this->setWindowTitle(fileName);
     QTextStream in(&file);
     QString text = in.readAll();
     MyCodeEditor* codeEditor = new MyCodeEditor(this, QFont(m_fontFamily, m_fontSize));
     codeEditor->setPlainText(text);
-    ui->tabWidget->addTab(codeEditor, m_currentFile);
+    codeEditor->setFileName(fileName);
+    ui->tabWidget->addTab(codeEditor, fileName);
+    initAction();
     ui->tabWidget->setCurrentIndex(ui->tabWidget->count() - 1);
     file.close();
 
-    SaveHistory(m_currentFile);
+    SaveHistory(fileName);
     InitMenu();
 }
 
@@ -119,6 +133,7 @@ void MainWindow::initFont()
 void MainWindow::on_new_file_triggered()
 {
     ui->tabWidget->addTab(new MyCodeEditor(this, QFont(m_fontFamily, m_fontSize)), "NewTab.txt");
+    initAction();
 }
 
 
@@ -132,17 +147,18 @@ void MainWindow::on_open_file_triggered()
         return;
     }
 
-    m_currentFile = fileName;
     this->setWindowTitle(fileName);
     QTextStream in(&file);
     QString text = in.readAll();
     MyCodeEditor* codeEditor = new MyCodeEditor(this, QFont(m_fontFamily, m_fontSize));
     codeEditor->setPlainText(text);
-    ui->tabWidget->addTab(codeEditor, m_currentFile);
+    codeEditor->setFileName(fileName);
+    ui->tabWidget->addTab(codeEditor, fileName);
+    initAction();
     ui->tabWidget->setCurrentIndex(ui->tabWidget->count() - 1);
     file.close();
 
-    SaveHistory(m_currentFile);
+    SaveHistory(fileName);
     InitMenu();
 }
 
@@ -279,6 +295,7 @@ void MainWindow::on_tabWidget_tabCloseRequested(int index)
 
     delete codeEditor;
     ui->tabWidget->removeTab(index);
+    initAction();
 }
 
 
