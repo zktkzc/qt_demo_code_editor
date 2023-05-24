@@ -100,7 +100,10 @@ void MainWindow::OpenRecentFile()
     this->setWindowTitle(fileName);
     QTextStream in(&file);
     QString text = in.readAll();
-    ui->textEdit->setText(text);
+    MyCodeEditor* codeEditor = new MyCodeEditor(this);
+    codeEditor->setPlainText(text);
+    ui->tabWidget->addTab(codeEditor, m_currentFile);
+    ui->tabWidget->setCurrentIndex(ui->tabWidget->count() - 1);
     file.close();
 
     SaveHistory(m_currentFile);
@@ -171,46 +174,32 @@ void MainWindow::on_save_as_triggered()
 
 void MainWindow::on_paste_triggered()
 {
-    ui->textEdit->paste();
+    MyCodeEditor* codeEditor = (MyCodeEditor*)(ui->tabWidget->currentWidget());
+    if (codeEditor)
+    {
+        codeEditor->paste();
+    }
 }
 
 
 void MainWindow::on_cut_triggered()
 {
-    ui->textEdit->cut();
+    MyCodeEditor* codeEditor = (MyCodeEditor*)(ui->tabWidget->currentWidget());
+    if (codeEditor)
+    {
+        codeEditor->cut();
+    }
 }
 
 
 void MainWindow::on_copy_triggered()
 {
-    ui->textEdit->copy();
+    MyCodeEditor* codeEditor = (MyCodeEditor*)(ui->tabWidget->currentWidget());
+    if (codeEditor)
+    {
+        codeEditor->copy();
+    }
 }
-
-
-void MainWindow::on_bolder_triggered(bool checked)
-{
-    ui->textEdit->setFontWeight(checked ? QFont::Bold : QFont::Normal);
-}
-
-void MainWindow::on_italic_triggered(bool checked)
-{
-    ui->textEdit->setFontItalic(checked);
-}
-
-
-void MainWindow::on_underline_triggered(bool checked)
-{
-    ui->textEdit->setFontUnderline(checked);
-}
-
-
-void MainWindow::on_font_triggered()
-{
-    bool fontSelected;
-    auto font = QFontDialog::getFont(&fontSelected, this);
-    if (fontSelected) ui->textEdit->setFont(font);
-}
-
 
 void MainWindow::on_about_triggered()
 {
@@ -220,13 +209,21 @@ void MainWindow::on_about_triggered()
 
 void MainWindow::on_undo_triggered()
 {
-    ui->textEdit->undo();
+    MyCodeEditor* codeEditor = (MyCodeEditor*)(ui->tabWidget->currentWidget());
+    if (codeEditor)
+    {
+        codeEditor->undo();
+    }
 }
 
 
 void MainWindow::on_redo_triggered()
 {
-    ui->textEdit->redo();
+    MyCodeEditor* codeEditor = (MyCodeEditor*)(ui->tabWidget->currentWidget());
+    if (codeEditor)
+    {
+        codeEditor->redo();
+    }
 }
 
 
@@ -243,7 +240,11 @@ void MainWindow::on_print_triggered()
     QPrintDialog dialog(&printDev, this);
     if (dialog.exec() == QDialog::Rejected) return;
 #endif
-    ui->textEdit->print(&printDev);
+    MyCodeEditor* codeEditor = (MyCodeEditor*)(ui->tabWidget->currentWidget());
+    if (codeEditor)
+    {
+        codeEditor->print(&printDev);
+    }
 #endif
 }
 
@@ -258,5 +259,16 @@ void MainWindow::on_tabWidget_tabCloseRequested(int index)
 {
     delete (ui->tabWidget->cornerWidget());
     ui->tabWidget->removeTab(index);
+}
+
+
+void MainWindow::on_font_triggered()
+{
+    bool fontSelected;
+    QFont font = QFontDialog::getFont(&fontSelected, this);
+    if (fontSelected)
+    {
+
+    }
 }
 

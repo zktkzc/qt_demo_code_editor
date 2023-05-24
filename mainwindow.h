@@ -55,14 +55,6 @@ private slots:
 
     void on_copy_triggered();
 
-    void on_bolder_triggered(bool checked);
-
-    void on_italic_triggered(bool checked);
-
-    void on_underline_triggered(bool checked);
-
-    void on_font_triggered();
-
     void on_about_triggered();
 
     void on_undo_triggered();
@@ -76,6 +68,8 @@ private slots:
     void on_clear_history_triggered();
 
     void on_tabWidget_tabCloseRequested(int index);
+
+    void on_font_triggered();
 
 private:
     Ui::MainWindow *ui;

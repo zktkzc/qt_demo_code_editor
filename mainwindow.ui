@@ -18,16 +18,6 @@
     <normaloff>:/images/pencil.png</normaloff>:/images/pencil.png</iconset>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <widget class="QTextEdit" name="textEdit">
-    <property name="geometry">
-     <rect>
-      <x>280</x>
-      <y>20</y>
-      <width>141</width>
-      <height>121</height>
-     </rect>
-    </property>
-   </widget>
    <widget class="QTabWidget" name="tabWidget">
     <property name="geometry">
      <rect>
@@ -92,9 +82,6 @@
     <addaction name="paste"/>
     <addaction name="cut"/>
     <addaction name="separator"/>
-    <addaction name="bolder"/>
-    <addaction name="italic"/>
-    <addaction name="underline"/>
     <addaction name="separator"/>
     <addaction name="font"/>
    </widget>
@@ -149,9 +136,6 @@
    <attribute name="toolBarBreak">
     <bool>false</bool>
    </attribute>
-   <addaction name="bolder"/>
-   <addaction name="italic"/>
-   <addaction name="underline"/>
    <addaction name="font"/>
   </widget>
   <widget class="QToolBar" name="toolBar_4">
