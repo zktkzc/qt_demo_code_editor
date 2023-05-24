@@ -1,5 +1,6 @@
 #include "mycodeeditor.h"
 #include "myhighlighter.h"
+#include "qscrollbar.h"
 
 #include <QPainter>
 
@@ -76,12 +77,17 @@ void MyCodeEditor::lineNumberWidgetPaintEvent(QPaintEvent *event)
     while (block.isValid() && top <= event->rect().bottom())
     {
         painter.setPen(cursorTop == top ? Qt::black : Qt::gray);
-        painter.drawText(0, top, getLineNumberWidgetWidth(), bottom - top, Qt::AlignRight, QString::number(blockNumber + 1));
+        painter.drawText(0, top, getLineNumberWidgetWidth() - 3, bottom - top, Qt::AlignRight, QString::number(blockNumber + 1));
         block = block.next();
         top = bottom;
         bottom = top + blockBoundingRect(block).height();
         blockNumber++;
     }
+}
+
+void MyCodeEditor::lineNumberWidgetMousePressEvent(QMouseEvent *event)
+{
+    setTextCursor(QTextCursor(document()->findBlockByLineNumber(event->y() / fontMetrics().height() + verticalScrollBar()->value())));
 }
 
 void MyCodeEditor::resizeEvent(QResizeEvent *event)

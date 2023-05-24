@@ -12,10 +12,10 @@ class MyCodeEditor : public QPlainTextEdit
 public:
     explicit MyCodeEditor(QWidget *parent = nullptr);
     void lineNumberWidgetPaintEvent(QPaintEvent* event);
+    void lineNumberWidgetMousePressEvent(QMouseEvent* event);
 
 protected:
     void resizeEvent(QResizeEvent* event) override;
-
 private:
     void initFont();
     void initConnection();
@@ -44,6 +44,11 @@ protected:
     void paintEvent(QPaintEvent* event) override
     {
         codeEditor->lineNumberWidgetPaintEvent(event);
+    }
+
+    void mousePressEvent(QMouseEvent* event) override
+    {
+        codeEditor->lineNumberWidgetMousePressEvent(event);
     }
 
 private:
