@@ -13,6 +13,7 @@ public:
     explicit MyCodeEditor(QWidget *parent = nullptr);
     void lineNumberWidgetPaintEvent(QPaintEvent* event);
     void lineNumberWidgetMousePressEvent(QMouseEvent* event);
+    void lineNumberWidgetWheelEvent(QWheelEvent* event);
 
 protected:
     void resizeEvent(QResizeEvent* event) override;
@@ -49,6 +50,11 @@ protected:
     void mousePressEvent(QMouseEvent* event) override
     {
         codeEditor->lineNumberWidgetMousePressEvent(event);
+    }
+
+    void wheelEvent(QWheelEvent* event) override
+    {
+        codeEditor->lineNumberWidgetWheelEvent(event);
     }
 
 private:

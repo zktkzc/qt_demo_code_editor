@@ -14,6 +14,8 @@ MyCodeEditor::MyCodeEditor(QWidget *parent)
     initHighlighter();
 
     updateLineNumberWidgetWidth();
+
+    setLineWrapMode(QPlainTextEdit::NoWrap);
 }
 
 void MyCodeEditor::initFont()
@@ -88,6 +90,15 @@ void MyCodeEditor::lineNumberWidgetPaintEvent(QPaintEvent *event)
 void MyCodeEditor::lineNumberWidgetMousePressEvent(QMouseEvent *event)
 {
     setTextCursor(QTextCursor(document()->findBlockByLineNumber(event->y() / fontMetrics().height() + verticalScrollBar()->value())));
+}
+
+void MyCodeEditor::lineNumberWidgetWheelEvent(QWheelEvent *event)
+{
+    if (event->orientation() == Qt::Horizontal)
+        horizontalScrollBar()->setValue(horizontalScrollBar()->value() - event->delta());
+    else
+        verticalScrollBar()->setValue(verticalScrollBar()->value() - event->delta());
+    event->accept();
 }
 
 void MyCodeEditor::resizeEvent(QResizeEvent *event)
