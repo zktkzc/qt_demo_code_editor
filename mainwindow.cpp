@@ -2,10 +2,8 @@
 #include "mycodeeditor.h"
 #include "ui_mainwindow.h"
 
-QSettings *m_settings;
-
 // 获取历史记录
-QList<QString> GetHistory()
+QList<QString> MainWindow::GetHistory()
 {
     // 打开开始读
     int size = m_settings->beginReadArray("history");
@@ -23,7 +21,7 @@ QList<QString> GetHistory()
 }
 
 // 保存历史记录
-void SaveHistory(QString path)
+void MainWindow::SaveHistory(QString path)
 {
     // 获取历史记录
     auto list = GetHistory();
@@ -55,8 +53,7 @@ MainWindow::MainWindow(QWidget *parent)
 {
     ui->setupUi(this);
     this->setCentralWidget(ui->tabWidget);
-    if (!m_settings)
-        m_settings = new QSettings("settings.ini", QSettings::IniFormat);
+    m_settings = new QSettings("settings.ini", QSettings::IniFormat);
 
     initFont();
 
@@ -265,7 +262,22 @@ void MainWindow::on_clear_history_triggered()
 
 void MainWindow::on_tabWidget_tabCloseRequested(int index)
 {
-    delete (ui->tabWidget->cornerWidget());
+    MyCodeEditor* codeEditor = (MyCodeEditor*)(ui->tabWidget->currentWidget());
+    if (!codeEditor->checkSaved())
+    {
+        auto btn = QMessageBox::question(this, "警告", "您还没有保存文档！是否保存？", QMessageBox::Yes | QMessageBox::No);
+        if (btn == QMessageBox::Yes)
+        {
+            if (codeEditor->saveFile())
+            {
+                SaveHistory(codeEditor->getFileName());
+                ui->tabWidget->setTabText(ui->tabWidget->currentIndex(), codeEditor->getFileName());
+                InitMenu();
+            }
+        }
+    }
+
+    delete codeEditor;
     ui->tabWidget->removeTab(index);
 }
 

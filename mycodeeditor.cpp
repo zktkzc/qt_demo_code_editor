@@ -20,24 +20,15 @@ MyCodeEditor::MyCodeEditor(QWidget *parent, QFont font)
 
 MyCodeEditor::~MyCodeEditor()
 {
-    if (lineNumberWidget)
-    {
-        delete lineNumberWidget;
-        lineNumberWidget = nullptr;
-    }
-
-    if (m_highlighter)
-    {
-        delete m_highlighter;
-        m_highlighter = nullptr;
-    }
+    delete lineNumberWidget;
 }
 
 void MyCodeEditor::initConnection()
 {
     connect(this, SIGNAL(cursorPositionChanged()), this, SLOT(highlightCurrentLine()));
-    connect(this, SIGNAL(updateRequest(QRect,int)), this, SLOT(updateLineNumberWidget(QRect, int)));
+    connect(this, SIGNAL(updateRequest(QRect,int)), this, SLOT(updateLineNumberWidget(QRect,int)));
     connect(this, SIGNAL(blockCountChanged(int)), this, SLOT(updateLineNumberWidgetWidth()));
+    connect(this, SIGNAL(textChanged()), this, SLOT(updateSaveState()));
 }
 
 void MyCodeEditor::initHighlighter()
@@ -73,6 +64,12 @@ void MyCodeEditor::updateLineNumberWidget(QRect rect, int dy)
 void MyCodeEditor::updateLineNumberWidgetWidth()
 {
     setViewportMargins(getLineNumberWidgetWidth(), 0, 0, 0); // 设置边距
+}
+
+void MyCodeEditor::updateSaveState()
+{
+    // 更新保存状态
+    m_isSaved = false;
 }
 
 void MyCodeEditor::lineNumberWidgetPaintEvent(QPaintEvent *event)
@@ -131,7 +128,7 @@ bool MyCodeEditor::saveFile()
     QTextStream out(&file);
     out << toPlainText();
     file.close();
-
+    m_isSaved = true;
     return true;
 }
 
@@ -151,6 +148,7 @@ bool MyCodeEditor::saveAs()
     QString text = toPlainText();
     out << text;
     file.close();
+    m_isSaved = true;
     return true;
 }
 
@@ -159,6 +157,11 @@ void MyCodeEditor::setAllFont(QFont font)
     this->setFont(font);
     m_highlighter->setFont(font);
     updateLineNumberWidgetWidth();
+}
+
+bool MyCodeEditor::checkSaved()
+{
+    return m_isSaved;
 }
 
 void MyCodeEditor::resizeEvent(QResizeEvent *event)

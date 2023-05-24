@@ -40,6 +40,8 @@ private:
     void InitMenu();
     void OpenRecentFile();
     void initFont();
+    QList<QString> GetHistory();
+    void SaveHistory(QString path);
 
 private slots:
     void on_new_file_triggered();
@@ -77,6 +79,7 @@ private:
     QString m_currentFile;
     QString m_fontFamily;
     int m_fontSize;
+    QSettings *m_settings;
 
 };
 #endif // MAINWINDOW_H

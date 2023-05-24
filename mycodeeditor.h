@@ -20,6 +20,7 @@ public:
     bool saveFile();
     bool saveAs();
     void setAllFont(QFont font);
+    bool checkSaved();
     void setFileName(QString fileName)
     {
         m_fileName = fileName;
@@ -40,11 +41,13 @@ private slots:
     void highlightCurrentLine();
     void updateLineNumberWidget(QRect rect, int dy);
     void updateLineNumberWidgetWidth();
+    void updateSaveState();
 
 private:
     LineNumberWidget* lineNumberWidget;
     QString m_fileName;
     MyHighlighter* m_highlighter;
+    bool m_isSaved = false;
 
 };
 
