@@ -309,8 +309,8 @@ void MainWindow::on_tabWidget_tabCloseRequested(int index)
         }
     }
 
-    delete codeEditor;
     ui->tabWidget->removeTab(index);
+    delete codeEditor;
     initAction();
 }
 
